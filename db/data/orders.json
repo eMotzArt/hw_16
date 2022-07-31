@@ -73,7 +73,7 @@
         "end_date": "12/14/2094",
         "address": "13991 Davis Village\nNorth Catherineborough, VT 16740",
         "price": 401,
-        "customer_id": 0,
+        "customer_id": 1,
         "executor_id": 7
     },
     {
@@ -172,7 +172,7 @@
         "end_date": "04/06/2024",
         "address": "22455 Higgins Junction Apt. 042\nNew Keith, OH 17493",
         "price": 950,
-        "customer_id": 0,
+        "customer_id": 1,
         "executor_id": 8
     },
     {
@@ -326,7 +326,7 @@
         "end_date": "06/09/2011",
         "address": "USCGC Brown\nFPO AA 20968",
         "price": 4765,
-        "customer_id": 0,
+        "customer_id": 1,
         "executor_id": 8
     },
     {
@@ -392,7 +392,7 @@
         "end_date": "04/07/2015",
         "address": "762 Reynolds Gateway\nPetersonhaven, MI 61113",
         "price": 2511,
-        "customer_id": 0,
+        "customer_id": 1,
         "executor_id": 23
     },
     {
@@ -491,7 +491,7 @@
         "end_date": "06/11/2060",
         "address": "7633 Bentley Radial Apt. 603\nPort Jacobton, SC 89301",
         "price": 4354,
-        "customer_id": 0,
+        "customer_id": 1,
         "executor_id": 12
     },
     {
@@ -513,7 +513,7 @@
         "end_date": "11/22/2045",
         "address": "25040 Bryce Meadow\nNew Randy, IN 59968",
         "price": 3135,
-        "customer_id": 0,
+        "customer_id": 1,
         "executor_id": 18
     },
     {
@@ -547,6 +547,6 @@
         "address": "12637 Lisa Points\nWilliamsburgh, NM 29343",
         "price": 8490,
         "customer_id": 24,
-        "executor_id": 0
+        "executor_id": 1
     }
 ]
