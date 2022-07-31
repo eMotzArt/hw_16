@@ -37,8 +37,8 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    customer_constraint = db.relationship('User', foreign_keys=[customer_id])
-    executor_constraint = db.relationship('User', foreign_keys=[executor_id])
+    customer: User = db.relationship('User', foreign_keys=[customer_id])
+    executor: User = db.relationship('User', foreign_keys=[executor_id])
 
     def to_dict(self):
         return {
@@ -50,7 +50,9 @@ class Order(db.Model):
             "address": self.address,
             "price": self.price,
             "customer_id": self.customer_id,
-            "executor_id": self.executor_id
+            "customer_info": self.customer.to_dict(),
+            "executor_id": self.executor_id,
+            "executor_info": self.executor.to_dict(),
         }
 
 class Offer(db.Model):
@@ -61,12 +63,14 @@ class Offer(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    order_constraint = db.relationship('Order', foreign_keys=[order_id])
-    executor_constraint = db.relationship('User', foreign_keys=[executor_id])
+    order: Order = db.relationship('Order', foreign_keys=[order_id])
+    executor: User = db.relationship('User', foreign_keys=[executor_id])
 
     def to_dict(self):
         return {
             "id": self.id,
             "order_id": self.order_id,
-            "executor_id": self.executor_id
+            "order_info": self.order.to_dict(),
+            "executor_id": self.executor_id,
+            "executor_info": self.executor.to_dict()
         }
