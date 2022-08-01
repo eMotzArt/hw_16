@@ -2,28 +2,164 @@ from db.db_init import db
 from db.models import User, Offer, Order
 
 def get_all_users_list():
+    """Возвращает список со словарями-данными всех юзеров"""
     all_users = db.session.query(User).all()
     to_return = [user.to_dict() for user in all_users]
     return to_return
 
 def get_user_by_id(id):
-    user = db.session.query(User).get(id).to_dict()
-    return user
+    """Возвращает словарь-юзера с указанным id"""
+    user = db.session.query(User).get(id)
+    # если юзер найден
+    if user:
+        return user.to_dict()
+    raise IndexError(f'Пользователь с id {id} в базе не найден')
 
 def get_all_orders_list():
+    """Возвращает список со словарями-данными всех заказов"""
     all_orders = db.session.query(Order).all()
     to_return = [order.to_dict() for order in all_orders]
     return to_return
 
 def get_order_by_id(id):
-    order = db.session.query(Order).get(id).to_dict()
-    return order
+    """Возвращает словарь-заказ с указанным id"""
+    order = db.session.query(Order).get(id)
+    if order:
+        return order.to_dict()
+    raise IndexError(f"Заказ с id {id} в базе не найден")
 
 def get_all_offers_list():
+    """Возвращает список со словарями-данными всех предложений"""
     all_offers = db.session.query(Offer).all()
     to_return = [offer.to_dict() for offer in all_offers]
     return to_return
 
 def get_offer_by_id(id):
-    offer = db.session.query(Offer).get(id).to_dict()
-    return offer
+    """Возвращает словарь-предложение с указанным id"""
+    offer = db.session.query(Offer).get(id)
+    if offer:
+        return offer.to_dict()
+    raise IndexError(f"Предложение с id {id} в базе не найден")
+
+
+def add_new_user_to_db(user_data: dict):
+    """Добавляет нового пользователя с данными из user_data"""
+    # Валидация на наличие аттрибутов (колонок) в таблице
+    for key in user_data.keys():
+        if not getattr(User, key, False):
+            raise AttributeError(f'В таблице User отсутствует поле {key}')
+
+    new_user = [User(**user_data)][0]
+    db.session.add(new_user)
+    db.session.commit()
+    return 'OK'
+
+def update_user_info(user_id, data):
+    """Обновляет данные пользователя на новые"""
+    user = db.session.query(User).get(user_id)
+    if not user:
+        raise IndexError(f"Пользователь с id {user_id} в базе не найден")
+
+    for k, v in data.items():
+        if getattr(user, k, False) != False:
+            setattr(user, k, v)
+        else:
+            raise AttributeError(f'У пользователя отсутствует поле {k}')
+    db.session.commit()
+    return 'OK'
+
+def delete_user_from_db(user_id):
+    user = db.session.query(User).get(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return 'OK'
+    raise IndexError(f"Пользователь с id {user_id} в базе не найден")
+
+
+
+#orders
+def add_new_order_to_db(order_data: dict):
+    """Добавляет новый заказ с данными из user_data"""
+    # Валидация на наличие аттрибутов (колонок) в таблице
+    for key in order_data.keys():
+        if not getattr(Order, key, False):
+            raise AttributeError(f'В таблице Order отсутствует поле {key}')
+
+    # ПРОВЕРКИ на наличие пользователей
+    if not User.query.get(order_data['customer_id']):
+        raise IndexError(f"Заказчик с id {order_data['customer_id']} в базе не найден")
+
+    if not User.query.get(order_data['executor_id']):
+        raise IndexError(f"Исполнитель с id {order_data['executor_id']} в базе не найден")
+
+
+    new_order = [Order(**order_data)][0]
+    db.session.add(new_order)
+    db.session.commit()
+    return 'OK'
+
+def update_order_info(order_id, data):
+    """Обновляет данные пользователя на новые"""
+    order = db.session.query(Order).get(order_id)
+    if not order:
+        raise IndexError(f"Заказ с id {order_id} в базе не найден")
+
+    for k, v in data.items():
+        if getattr(order, k, False) != False:
+            setattr(order, k, v)
+        else:
+            raise AttributeError(f'У заказа отсутствует поле {k}')
+    db.session.commit()
+    return 'OK'
+
+def delete_order_from_db(order_id):
+    order = db.session.query(Order).get(order_id)
+    if order:
+        db.session.delete(order)
+        db.session.commit()
+        return 'OK'
+    raise IndexError(f"Пользователь с id {order_id} в базе не найден")
+
+#offers
+def add_new_offer_to_db(offer_data: dict):
+    """Добавляет новый заказ с данными из user_data"""
+    # Валидация на наличие аттрибутов (колонок) в таблице
+    for key in offer_data.keys():
+        if not getattr(Offer, key, False):
+            raise AttributeError(f'В таблице Offer отсутствует поле {key}')
+
+    # ПРОВЕРКИ на наличие пользователей
+    if not User.query.get(offer_data['executor_id']):
+        raise IndexError(f"Исполнитель с id {offer_data['executor_id']} в базе не найден")
+
+    if not Order.query.get(offer_data['order_id']):
+        raise IndexError(f"Заказ с id {offer_data['order_id']} в базе не найден")
+
+
+    new_offer = [Offer(**offer_data)][0]
+    db.session.add(new_offer)
+    db.session.commit()
+    return 'OK'
+
+def update_offer_info(offer_id, data):
+    """Обновляет данные пользователя на новые"""
+    offer = db.session.query(Offer).get(offer_id)
+    if not offer:
+        raise IndexError(f"Предложение с id {offer_id} в базе не найден")
+
+    for k, v in data.items():
+        if getattr(offer, k, False) != False:
+            setattr(offer, k, v)
+        else:
+            raise AttributeError(f'У предложения отсутствует поле {k}')
+    db.session.commit()
+    return 'OK'
+
+def delete_offer_from_db(offer_id):
+    offer = db.session.query(Offer).get(offer_id)
+    if offer:
+        db.session.delete(offer)
+        db.session.commit()
+        return 'OK'
+    raise IndexError(f"Предложение с id {offer_id} в базе не найден")
