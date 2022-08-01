@@ -12,6 +12,7 @@ class User(db.Model):
     role = db.Column(db.String(255))
     phone = db.Column(db.String(255))
 
+    #связи, при удалении юзера -> каскадное удаление связанных офферов и ордеров, в которых юзер указан как fk
     as_executor_in_offers = db.relationship('Offer', cascade='all, delete')
     as_customer_in_orders = db.relationship("Order", cascade='all, delete', foreign_keys="Order.customer_id")
     as_executor_in_orders = db.relationship("Order", cascade='all, delete', foreign_keys="Order.executor_id")
@@ -44,6 +45,7 @@ class Order(db.Model):
     customer: User = db.relationship('User', foreign_keys=[customer_id])
     executor: User = db.relationship('User', foreign_keys=[executor_id])
 
+    #связи, при удалении ордера -> каскадное удаление связанных офферов, в которых ордер указан как fk
     as_order_in_offers = db.relationship('Offer', cascade='all, delete')
 
 
