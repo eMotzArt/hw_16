@@ -131,7 +131,7 @@ def add_new_offer_to_db(offer_data: dict):
         if not getattr(Offer, key, False):
             raise AttributeError(f'В таблице Offer отсутствует поле {key}')
 
-    # ПРОВЕРКИ на наличие пользователей
+    # ПРОВЕРКИ на наличие пользователя и заказа
     if not User.query.get(offer_data['executor_id']):
         raise IndexError(f"Исполнитель с id {offer_data['executor_id']} в базе не найден")
 
