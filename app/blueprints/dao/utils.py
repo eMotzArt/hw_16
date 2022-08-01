@@ -69,6 +69,7 @@ def update_user_info(user_id, data):
     return 'OK'
 
 def delete_user_from_db(user_id):
+    """Удаляет пользователя с указанным id"""
     user = db.session.query(User).get(user_id)
     if user:
         db.session.delete(user)
@@ -100,7 +101,7 @@ def add_new_order_to_db(order_data: dict):
     return 'OK'
 
 def update_order_info(order_id, data):
-    """Обновляет данные пользователя на новые"""
+    """Обновляет данные заказа на новые"""
     order = db.session.query(Order).get(order_id)
     if not order:
         raise IndexError(f"Заказ с id {order_id} в базе не найден")
@@ -114,6 +115,7 @@ def update_order_info(order_id, data):
     return 'OK'
 
 def delete_order_from_db(order_id):
+    """Удаляет заказ с указанным id"""
     order = db.session.query(Order).get(order_id)
     if order:
         db.session.delete(order)
@@ -123,7 +125,7 @@ def delete_order_from_db(order_id):
 
 #offers
 def add_new_offer_to_db(offer_data: dict):
-    """Добавляет новый заказ с данными из user_data"""
+    """Добавляет новое предложение с данными из offer_data"""
     # Валидация на наличие аттрибутов (колонок) в таблице
     for key in offer_data.keys():
         if not getattr(Offer, key, False):
@@ -143,7 +145,7 @@ def add_new_offer_to_db(offer_data: dict):
     return 'OK'
 
 def update_offer_info(offer_id, data):
-    """Обновляет данные пользователя на новые"""
+    """Обновляет данные предложения на новые"""
     offer = db.session.query(Offer).get(offer_id)
     if not offer:
         raise IndexError(f"Предложение с id {offer_id} в базе не найден")
@@ -157,6 +159,7 @@ def update_offer_info(offer_id, data):
     return 'OK'
 
 def delete_offer_from_db(offer_id):
+    """Удаляет предложение с указанным id"""
     offer = db.session.query(Offer).get(offer_id)
     if offer:
         db.session.delete(offer)
