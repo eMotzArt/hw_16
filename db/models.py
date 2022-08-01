@@ -12,6 +12,10 @@ class User(db.Model):
     role = db.Column(db.String(255))
     phone = db.Column(db.String(255))
 
+    as_executor_in_offers = db.relationship('Offer', cascade='all, delete')
+    as_customer_in_orders = db.relationship("Order", cascade='all, delete', foreign_keys="Order.customer_id")
+    as_executor_in_orders = db.relationship("Order", cascade='all, delete', foreign_keys="Order.executor_id")
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -40,6 +44,9 @@ class Order(db.Model):
     customer: User = db.relationship('User', foreign_keys=[customer_id])
     executor: User = db.relationship('User', foreign_keys=[executor_id])
 
+    as_order_in_offers = db.relationship('Offer', cascade='all, delete')
+
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -65,6 +72,7 @@ class Offer(db.Model):
 
     order: Order = db.relationship('Order', foreign_keys=[order_id])
     executor: User = db.relationship('User', foreign_keys=[executor_id])
+
 
     def to_dict(self):
         return {
