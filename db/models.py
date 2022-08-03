@@ -17,6 +17,10 @@ class User(db.Model):
     as_customer_in_orders = db.relationship("Order", back_populates="customer", cascade='all, delete', foreign_keys="Order.customer_id")
     as_executor_in_orders = db.relationship("Order", back_populates="executor", cascade='all, delete', foreign_keys="Order.executor_id")
 
+    @staticmethod
+    def attrs():
+        return ['id', 'first_name', 'last_name', 'age', 'email', 'role', 'phone']
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -48,6 +52,9 @@ class Order(db.Model):
     #связи, при удалении ордера -> каскадное удаление связанных офферов, в которых ордер указан как fk
     as_order_in_offers = db.relationship('Offer', back_populates="order", cascade='all, delete')
 
+    @staticmethod
+    def attrs():
+        return ['id', 'name', 'description', 'start_date', 'end_date', 'address', 'price', 'customer_id', 'executor_id']
 
     def to_dict(self):
         return {
@@ -75,6 +82,9 @@ class Offer(db.Model):
     order: Order = db.relationship('Order', back_populates="as_order_in_offers", foreign_keys=[order_id])
     executor: User = db.relationship('User', back_populates="as_executor_in_offers", foreign_keys=[executor_id])
 
+    @staticmethod
+    def attrs():
+        return ['id', 'order_id', 'executor_id']
 
     def to_dict(self):
         return {
