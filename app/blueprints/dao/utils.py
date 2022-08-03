@@ -46,7 +46,9 @@ def add_new_user_to_db(user_data: dict):
     """Добавляет нового пользователя с данными из user_data"""
     # Валидация на наличие аттрибутов (колонок) в таблице
     for key in user_data.keys():
-        if not getattr(User, key, False):
+        try:
+            getattr(User, key)
+        except AttributeError:
             raise AttributeError(f'В таблице User отсутствует поле {key}')
 
     new_user = [User(**user_data)][0]
@@ -61,10 +63,12 @@ def update_user_info(user_id, data):
         raise IndexError(f"Пользователь с id {user_id} в базе не найден")
 
     for k, v in data.items():
-        if getattr(user, k, False) != False:
-            setattr(user, k, v)
-        else:
+        try:
+            getattr(user, k)
+        except AttributeError:
             raise AttributeError(f'У пользователя отсутствует поле {k}')
+        setattr(user, k, v)
+
     db.session.commit()
     return {"status": "User info changed successfully", "User": user.to_dict()}
 
@@ -84,7 +88,9 @@ def add_new_order_to_db(order_data: dict):
     """Добавляет новый заказ с данными из user_data"""
     # Валидация на наличие аттрибутов (колонок) в таблице
     for key in order_data.keys():
-        if not getattr(Order, key, False):
+        try:
+            getattr(Order, key)
+        except AttributeError:
             raise AttributeError(f'В таблице Order отсутствует поле {key}')
 
     # ПРОВЕРКИ на наличие пользователей
@@ -107,9 +113,9 @@ def update_order_info(order_id, data):
         raise IndexError(f"Заказ с id {order_id} в базе не найден")
 
     for k, v in data.items():
-        if getattr(order, k, False) != False:
-            setattr(order, k, v)
-        else:
+        try:
+            getattr(order, k)
+        except AttributeError:
             raise AttributeError(f'У заказа отсутствует поле {k}')
     db.session.commit()
     return {"status": "Order info changed successfully", "Order": order.to_dict()}
@@ -128,7 +134,9 @@ def add_new_offer_to_db(offer_data: dict):
     """Добавляет новое предложение с данными из offer_data"""
     # Валидация на наличие аттрибутов (колонок) в таблице
     for key in offer_data.keys():
-        if not getattr(Offer, key, False):
+        try:
+            getattr(Offer, key)
+        except AttributeError:
             raise AttributeError(f'В таблице Offer отсутствует поле {key}')
 
     # ПРОВЕРКИ на наличие пользователя и заказа
@@ -151,9 +159,9 @@ def update_offer_info(offer_id, data):
         raise IndexError(f"Предложение с id {offer_id} в базе не найден")
 
     for k, v in data.items():
-        if getattr(offer, k, False) != False:
-            setattr(offer, k, v)
-        else:
+        try:
+            getattr(offer, k)
+        except AttributeError:
             raise AttributeError(f'У предложения отсутствует поле {k}')
     db.session.commit()
     return {"status": "Offer info changed successfully", "Offer": offer.to_dict()}
