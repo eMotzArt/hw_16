@@ -117,6 +117,14 @@ def update_order_info(order_id, data):
             getattr(order, k)
         except AttributeError:
             raise AttributeError(f'У заказа отсутствует поле {k}')
+
+        if not User.query.get(data['customer_id']):
+            raise IndexError(f"Заказчик с id {data['customer_id']} в базе не найден")
+
+        if not User.query.get(data['executor_id']):
+            raise IndexError(f"Исполнитель с id {data['executor_id']} в базе не найден")
+        setattr(order, k, v)
+
     db.session.commit()
     return {"status": "Order info changed successfully", "Order": order.to_dict()}
 
@@ -163,6 +171,11 @@ def update_offer_info(offer_id, data):
             getattr(offer, k)
         except AttributeError:
             raise AttributeError(f'У предложения отсутствует поле {k}')
+        if not User.query.get(data['executor_id']):
+            raise IndexError(f"Исполнитель с id {data['executor_id']} в базе не найден")
+        if not Order.query.get(data['order_id']):
+            raise IndexError(f"Заказ с id {data['order_id']} в базе не найден")
+        setattr(offer, k, v)
     db.session.commit()
     return {"status": "Offer info changed successfully", "Offer": offer.to_dict()}
 
