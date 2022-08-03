@@ -13,7 +13,7 @@ class User(db.Model):
     phone = db.Column(db.String(255))
 
     #связи, при удалении юзера -> каскадное удаление связанных офферов и ордеров, в которых юзер указан как fk
-    as_executor_in_offers = db.relationship('Offer', back_populates="executor", cascade='all, delete')
+    as_executor_in_offers = db.relationship('Offer', back_populates="executor", cascade='all, delete', foreign_keys="Offer.executor_id")
     as_customer_in_orders = db.relationship("Order", back_populates="customer", cascade='all, delete', foreign_keys="Order.customer_id")
     as_executor_in_orders = db.relationship("Order", back_populates="executor", cascade='all, delete', foreign_keys="Order.executor_id")
 
