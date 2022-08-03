@@ -13,7 +13,7 @@ def get_user_by_id(id):
     # если юзер найден
     if user:
         return user.to_dict()
-    raise IndexError(f'Пользователь с id {id} в базе не найден')
+    return None
 
 def get_all_orders_list():
     """Возвращает список со словарями-данными всех заказов"""
@@ -26,7 +26,7 @@ def get_order_by_id(id):
     order = db.session.query(Order).get(id)
     if order:
         return order.to_dict()
-    raise IndexError(f"Заказ с id {id} в базе не найден")
+    return None
 
 def get_all_offers_list():
     """Возвращает список со словарями-данными всех предложений"""
@@ -39,7 +39,7 @@ def get_offer_by_id(id):
     offer = db.session.query(Offer).get(id)
     if offer:
         return offer.to_dict()
-    raise IndexError(f"Предложение с id {id} в базе не найден")
+    return None
 
 
 def add_new_user_to_db(user_data: dict):
