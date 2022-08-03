@@ -38,18 +38,18 @@ def add_new_user():
 
     new_user_data = request.get_json()
     result = add_new_user_to_db(new_user_data)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 @main_blueprint.put('/users/<int:user_id>')
 def update_user(user_id):
     new_user_data = request.get_json()
     result = update_user_info(user_id, new_user_data)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 @main_blueprint.delete('/users/<int:user_id>')
 def delete_user(user_id):
     result = delete_user_from_db(user_id)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 
 # orders
@@ -67,18 +67,18 @@ def add_new_order():
 
     new_order_data = request.get_json()
     result = add_new_order_to_db(new_order_data)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 @main_blueprint.put('/orders/<int:order_id>')
 def update_order(order_id):
     new_order_data = request.get_json()
     result = update_order_info(order_id, new_order_data)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 @main_blueprint.delete('/orders/<int:order_id>')
 def delete_order(order_id):
     result = delete_order_from_db(order_id)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 
 # offers
@@ -96,16 +96,16 @@ def add_new_offer():
 
     new_offer_data = request.get_json()
     result = add_new_offer_to_db(new_offer_data)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 @main_blueprint.put('/offers/<int:offer_id>')
 def update_offer(offer_id):
     new_offer_data = request.get_json()
     result = update_offer_info(offer_id, new_offer_data)
-    return jsonify({'status': result})
+    return jsonify(result)
 
 @main_blueprint.delete('/offers/<int:offer_id>')
 def delete_offer(offer_id):
     result = delete_offer_from_db(offer_id)
-    return jsonify({'status': result})
+    return jsonify(result)
 

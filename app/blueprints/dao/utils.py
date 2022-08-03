@@ -52,7 +52,7 @@ def add_new_user_to_db(user_data: dict):
     new_user = [User(**user_data)][0]
     db.session.add(new_user)
     db.session.commit()
-    return 'OK'
+    return {"status": "User added successfully", "User": new_user.to_dict()}
 
 def update_user_info(user_id, data):
     """Обновляет данные пользователя на новые"""
@@ -66,7 +66,7 @@ def update_user_info(user_id, data):
         else:
             raise AttributeError(f'У пользователя отсутствует поле {k}')
     db.session.commit()
-    return 'OK'
+    return {"status": "User info changed successfully", "User": user.to_dict()}
 
 def delete_user_from_db(user_id):
     """Удаляет пользователя с указанным id"""
@@ -74,7 +74,7 @@ def delete_user_from_db(user_id):
     if user:
         db.session.delete(user)
         db.session.commit()
-        return 'OK'
+        return {"status": "User deleted successfully"}
     raise IndexError(f"Пользователь с id {user_id} в базе не найден")
 
 
@@ -98,7 +98,7 @@ def add_new_order_to_db(order_data: dict):
     new_order = [Order(**order_data)][0]
     db.session.add(new_order)
     db.session.commit()
-    return 'OK'
+    return {"status": "Order added successfully", "Order": new_order.to_dict()}
 
 def update_order_info(order_id, data):
     """Обновляет данные заказа на новые"""
@@ -112,7 +112,7 @@ def update_order_info(order_id, data):
         else:
             raise AttributeError(f'У заказа отсутствует поле {k}')
     db.session.commit()
-    return 'OK'
+    return {"status": "Order info changed successfully", "Order": order.to_dict()}
 
 def delete_order_from_db(order_id):
     """Удаляет заказ с указанным id"""
@@ -120,7 +120,7 @@ def delete_order_from_db(order_id):
     if order:
         db.session.delete(order)
         db.session.commit()
-        return 'OK'
+        return {"status": "Order deleted successfully"}
     raise IndexError(f"Пользователь с id {order_id} в базе не найден")
 
 #offers
@@ -142,7 +142,7 @@ def add_new_offer_to_db(offer_data: dict):
     new_offer = [Offer(**offer_data)][0]
     db.session.add(new_offer)
     db.session.commit()
-    return 'OK'
+    return {"status": "Offer added successfully", "Offer": new_offer.to_dict()}
 
 def update_offer_info(offer_id, data):
     """Обновляет данные предложения на новые"""
@@ -156,7 +156,7 @@ def update_offer_info(offer_id, data):
         else:
             raise AttributeError(f'У предложения отсутствует поле {k}')
     db.session.commit()
-    return 'OK'
+    return {"status": "Offer info changed successfully", "Offer": offer.to_dict()}
 
 def delete_offer_from_db(offer_id):
     """Удаляет предложение с указанным id"""
@@ -164,5 +164,5 @@ def delete_offer_from_db(offer_id):
     if offer:
         db.session.delete(offer)
         db.session.commit()
-        return 'OK'
+        return {"status": "Offer deleted successfully"}
     raise IndexError(f"Предложение с id {offer_id} в базе не найден")
