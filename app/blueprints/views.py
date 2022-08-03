@@ -1,12 +1,7 @@
-from flask import Blueprint, request, url_for, redirect, jsonify
+from flask import Blueprint, request, jsonify
 from db.utils import fill_db
 from db.models import *
-from app.blueprints.dao.utils import get_all_users_list, get_user_by_id, \
-                                     get_all_orders_list, get_order_by_id, \
-                                     get_all_offers_list, get_offer_by_id, \
-                                     add_new_user_to_db, update_user_info, delete_user_from_db, \
-                                     add_new_order_to_db, update_order_info, delete_order_from_db, \
-                                     add_new_offer_to_db, delete_offer_from_db, update_offer_info
+from app.blueprints.dao.utils import User_db_worker as Users, Order_db_worker as Orders, Offer_db_worker as Offers
 
 main_blueprint = Blueprint('main_blueprint', __name__)
 
@@ -25,87 +20,87 @@ def page_main():
 # users
 @main_blueprint.get('/users/')
 def page_all_users():
-    return jsonify(get_all_users_list())
+    return jsonify(Users().get_all())
     # return db.session.query(Order, User).join((User, Order.customer_id == User.id)).all()
 
 @main_blueprint.get('/users/<int:user_id>')
 def page_user_by_id(user_id):
-    return jsonify(get_user_by_id(user_id))
+    return jsonify(Users().get_by_id(user_id))
 
 @main_blueprint.post('/users/')
 def add_new_user():
     # data should be send by Post application/json content type
 
     new_user_data = request.get_json()
-    result = add_new_user_to_db(new_user_data)
+    result = Users().add(new_user_data)
     return jsonify(result)
 
 @main_blueprint.put('/users/<int:user_id>')
 def update_user(user_id):
     new_user_data = request.get_json()
-    result = update_user_info(user_id, new_user_data)
+    result = Users().update(user_id, new_user_data)
     return jsonify(result)
 
 @main_blueprint.delete('/users/<int:user_id>')
 def delete_user(user_id):
-    result = delete_user_from_db(user_id)
+    result = Users().delete(user_id)
     return jsonify(result)
 
 
 # orders
 @main_blueprint.get('/orders/')
 def page_all_orders():
-    return jsonify(get_all_orders_list())
+    return jsonify(Orders().get_all())
 
 @main_blueprint.get('/orders/<int:order_id>')
 def page_order_by_id(order_id):
-    return jsonify(get_order_by_id(order_id))
+    return jsonify(Orders().get_by_id(order_id))
 
 @main_blueprint.post('/orders/')
 def add_new_order():
     # data should be send by Post application/json content type
 
     new_order_data = request.get_json()
-    result = add_new_order_to_db(new_order_data)
+    result = Orders().add(new_order_data)
     return jsonify(result)
 
 @main_blueprint.put('/orders/<int:order_id>')
 def update_order(order_id):
     new_order_data = request.get_json()
-    result = update_order_info(order_id, new_order_data)
+    result = Orders().update(order_id, new_order_data)
     return jsonify(result)
 
 @main_blueprint.delete('/orders/<int:order_id>')
 def delete_order(order_id):
-    result = delete_order_from_db(order_id)
+    result = Orders().delete(order_id)
     return jsonify(result)
 
 
 # offers
 @main_blueprint.get('/offers/')
 def page_all_offers():
-    return jsonify(get_all_offers_list())
+    return jsonify(Offers().get_all())
 
 @main_blueprint.get('/offers/<int:offer_id>')
 def page_offer_by_id(offer_id):
-    return jsonify(get_offer_by_id(offer_id))
+    return jsonify(Offers().get_by_id(offer_id))
 
 @main_blueprint.post('/offers/')
 def add_new_offer():
     # data should be send by Post application/json content type
 
     new_offer_data = request.get_json()
-    result = add_new_offer_to_db(new_offer_data)
+    result = Offers().add(new_offer_data)
     return jsonify(result)
 
 @main_blueprint.put('/offers/<int:offer_id>')
 def update_offer(offer_id):
     new_offer_data = request.get_json()
-    result = update_offer_info(offer_id, new_offer_data)
+    result = Offers().update(offer_id, new_offer_data)
     return jsonify(result)
 
 @main_blueprint.delete('/offers/<int:offer_id>')
 def delete_offer(offer_id):
-    result = delete_offer_from_db(offer_id)
+    result = Offers().delete(offer_id)
     return jsonify(result)
 
