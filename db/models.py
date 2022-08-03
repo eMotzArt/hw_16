@@ -1,5 +1,9 @@
+import enum
 from db.db_init import db
 
+class RoleEnum(enum.Enum):
+    customer = 'customer'
+    executor = 'executor'
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -9,7 +13,7 @@ class User(db.Model):
     last_name = db.Column(db.String(255))
     age = db.Column(db.SmallInteger)
     email = db.Column(db.String(255))
-    role = db.Column(db.String(255))
+    role = db.Column(db.Enum(RoleEnum))
     phone = db.Column(db.String(255))
 
     #связи, при удалении юзера -> каскадное удаление связанных офферов и ордеров, в которых юзер указан как fk
@@ -28,7 +32,7 @@ class User(db.Model):
             "last_name": self.last_name,
             "age": self.age,
             "email": self.email,
-            "role": self.role,
+            "role": self.role.name,
             "phone": self.phone
         }
 
