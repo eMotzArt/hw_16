@@ -9,5 +9,4 @@ def fill_db(data_file: str, table_name: db.Model):
     list_to_append = [table_name(**kwarg) for kwarg in data]
     db.session.add_all(list_to_append)
     db.session.commit()
-    print(db.session.query(table_name).all())
     db.session.close()

@@ -13,9 +13,9 @@ class User(db.Model):
     phone = db.Column(db.String(255))
 
     #связи, при удалении юзера -> каскадное удаление связанных офферов и ордеров, в которых юзер указан как fk
-    as_executor_in_offers = db.relationship('Offer', cascade='all, delete')
-    as_customer_in_orders = db.relationship("Order", cascade='all, delete', foreign_keys="Order.customer_id")
-    as_executor_in_orders = db.relationship("Order", cascade='all, delete', foreign_keys="Order.executor_id")
+    as_executor_in_offers = db.relationship('Offer', back_populates="executor", cascade='all, delete')
+    as_customer_in_orders = db.relationship("Order", back_populates="customer", cascade='all, delete', foreign_keys="Order.customer_id")
+    as_executor_in_orders = db.relationship("Order", back_populates="executor", cascade='all, delete', foreign_keys="Order.executor_id")
 
     def to_dict(self):
         return {
@@ -42,11 +42,11 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    customer: User = db.relationship('User', foreign_keys=[customer_id])
-    executor: User = db.relationship('User', foreign_keys=[executor_id])
+    customer: User = db.relationship('User', back_populates="as_customer_in_orders", foreign_keys=[customer_id])
+    executor: User = db.relationship('User', back_populates="as_executor_in_orders", foreign_keys=[executor_id])
 
     #связи, при удалении ордера -> каскадное удаление связанных офферов, в которых ордер указан как fk
-    as_order_in_offers = db.relationship('Offer', cascade='all, delete')
+    as_order_in_offers = db.relationship('Offer', back_populates="order", cascade='all, delete')
 
 
     def to_dict(self):
@@ -59,9 +59,9 @@ class Order(db.Model):
             "address": self.address,
             "price": self.price,
             "customer_id": self.customer_id,
-            "customer_info": self.customer.to_dict(),
+            "customer_name": self.customer.to_dict()['first_name'],
             "executor_id": self.executor_id,
-            "executor_info": self.executor.to_dict(),
+            "executor_name": self.executor.to_dict()['first_name'],
         }
 
 class Offer(db.Model):
@@ -72,8 +72,8 @@ class Offer(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    order: Order = db.relationship('Order', foreign_keys=[order_id])
-    executor: User = db.relationship('User', foreign_keys=[executor_id])
+    order: Order = db.relationship('Order', back_populates="as_order_in_offers", foreign_keys=[order_id])
+    executor: User = db.relationship('User', back_populates="as_executor_in_offers", foreign_keys=[executor_id])
 
 
     def to_dict(self):
