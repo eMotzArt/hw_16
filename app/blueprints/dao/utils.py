@@ -19,7 +19,7 @@ class User_db_worker:
         """Добавляет новую сущность к <self.target>"""
         for attr in data.keys():
             if not (attr in self.target.attrs()):
-                raise AttributeError(f'В таблице отсутствует поле {attr}, либо отсутствует доступ к полю')
+                raise AttributeError(f'В таблице отсутствует поле {attr}, либо поле только для чтения')
 
         new_item = [self.target(**data)][0]
         db.session.add(new_item)
@@ -34,7 +34,7 @@ class User_db_worker:
 
         for attribute, new_value in data.items():
             if attribute not in self.target.attrs():
-                raise AttributeError(f'У таблицы отсутствует поле {attribute}')
+                raise AttributeError(f'В таблице отсутствует поле {attribute}, либо поле только для чтения')
             setattr(item, attribute, new_value)
 
         db.session.commit()
